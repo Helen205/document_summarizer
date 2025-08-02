@@ -1,0 +1,63 @@
+# FastAPI ve temel web framework
+fastapi==0.115.9
+uvicorn==0.34.2
+gunicorn==23.0.0
+
+# Veritabanı ve ORM
+sqlalchemy==2.0.42
+psycopg2-binary==2.9.10
+alembic==1.16.4
+
+# Kimlik doğrulama ve güvenlik
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.1.2
+python-multipart==0.0.20
+
+# Veri doğrulama
+pydantic==2.11.4
+pydantic[email]==2.11.4
+pydantic-settings==2.9.1
+pydantic_core==2.33.2
+
+# Dosya işleme
+python-docx==1.2.0
+PyPDF2==3.0.1
+python-magic==0.4.27
+
+# AI ve ML
+google-generativeai==0.8.5
+google-ai-generativelanguage==0.6.15
+langchain==0.3.27
+chromadb==1.0.9
+
+# Vektör işleme
+numpy==2.2.5
+sentence-transformers==4.1.0
+torch==2.7.0
+transformers==4.51.3
+
+# Depolama
+boto3==1.39.17
+minio==7.2.16
+
+# Şifreleme
+cryptography==45.0.5
+
+# HTTP istemcisi
+httpx==0.28.1
+
+# Günlük kaydı
+loguru==0.7.3
+
+# Test
+pytest==8.4.1
+pytest-asyncio==1.1.0
+
+# Ortam değişkenleri
+python-dotenv==1.1.0
+
+
+# Performans izleme
+prometheus-fastapi-instrumentator==7.1.0
+

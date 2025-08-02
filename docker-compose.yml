@@ -1,0 +1,84 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: dms_postgres
+    environment:
+      POSTGRES_DB: dms_db
+      POSTGRES_USER: dms_user
+      POSTGRES_PASSWORD: dms_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dms_network
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: dms_chroma
+    ports:
+      - "8001:8001"
+    volumes:
+      - chroma_db:/data
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v2/heartbeat"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - dms_network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dms_backend
+    environment:
+      - DATABASE_URL=postgresql://dms_user:dms_password@postgres:5432/dms_db
+      - SECRET_KEY=your-secret-key-change-in-production
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - STORAGE_TYPE=disk
+      - STORAGE_PATH=/app/uploads
+      - CHROMA_PERSIST_DIRECTORY=/app/chroma_db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - uploads_data:/app/uploads
+    depends_on:
+      - postgres
+    networks:
+      - dms_network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dms_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - dms_network
+    command: npm run dev
+
+
+volumes:
+  postgres_data:
+  uploads_data:
+  chroma_db:
+
+networks:
+  dms_network:
+    driver: bridge 

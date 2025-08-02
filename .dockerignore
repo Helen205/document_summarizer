@@ -1,0 +1,41 @@
+# Ortak klasörler
+__pycache__/
+*.py[cod]
+*.so
+
+# Venv / poetry cache
+.venv/
+venv/
+env/
+*.egg-info/
+.poetry/
+
+# IDE/editor dosyaları
+.vscode/
+.idea/
+*.swp
+
+# Log dosyaları
+*.log
+
+# Testler (build’e gerek yoksa)
+tests/
+coverage.*
+*.cover
+
+# Sistem dosyaları
+.DS_Store
+Thumbs.db
+
+# Git klasörü
+.git/
+.gitignore
+
+# NodeJS varsa (frontend için)
+node_modules/
+npm-debug.log
+dist/
+build/
+
+# Dockerfile yanında çalışan CLI config’leri
+docker-compose.override.yml
