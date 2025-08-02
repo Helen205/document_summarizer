@@ -116,7 +116,36 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 # Gemini API
 GOOGLE_API_KEY=your-gemini-api-key
 
+# Storage Configuration
+STORAGE_TYPE=disk  # disk, s3, minio
+STORAGE_PATH=./uploads
+MAX_FILE_SIZE=104857600  # 100MB
 
+
+e
+
+# ChromaDB Configuration
+CHROMA_HOST= 
+CHROMA_PORT=8001
+CHROMA_PERSIST_DIRECTORY=./chroma_db
+CHROMA_SERVER_CORS_ALLOW_ORIGINS=["*"]
+CHROMA_SERVER_AUTH_PROVIDER=none
+CHROMA_TENANT=default_tenant
+
+# File Encryption (optional)
+ENCRYPTION_KEY=
+
+
+
+# Log Configuration
+LOG_LEVEL=INFO
+LOG_FILE=logs/app.log
+
+# RAG Configuration
+CHUNK_SIZE=512
+CHUNK_OVERLAP=50
+EMBEDDING_MODEL=gemini-embedding-001
+LLM_MODEL=gemini-2.0-flash 
 
 ## 📚 API Dokümantasyonu
 
