@@ -161,13 +161,19 @@ frontend/
 
 ### 4.1 Ana Tablolar
 
+
+ docker exec -it dms_postgres bash
+ psql -U dms_user -d dms_db
+
 **Users Tablosu:**
 ```sql
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(100) UNIQUE NOT NULL,
+    full_name VARCHAR(255) UNIQUE NOT NULL,
     hashed_password VARCHAR(255) NOT NULL,
+    role VARCHAR(100) DEFAULT 'admin',
     is_active BOOLEAN DEFAULT TRUE,
     is_admin BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -200,10 +206,11 @@ CREATE TABLE documents (
 CREATE TABLE activity_logs (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
-    activity_type VARCHAR(50) NOT NULL,
-    description TEXT,
     document_id INTEGER REFERENCES documents(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    activity_type VARCHAR(255),
+    description TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 ```
 

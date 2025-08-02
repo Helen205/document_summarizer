@@ -164,4 +164,56 @@ pytest
 cd frontend
 npm test
 ```
+**VERİTABANININ YÜKLENMEMESİ DURUMUNDA YAPILACAKLAR**
+ 
+ docker exec -it dms_postgres bash
+ psql -U dms_user -d dms_db
+
+**Users Tablosu:**
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    full_name VARCHAR(255) UNIQUE NOT NULL,
+    hashed_password VARCHAR(255) NOT NULL,
+    role VARCHAR(100) DEFAULT 'admin',
+    is_active BOOLEAN DEFAULT TRUE,
+    is_admin BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**Documents Tablosu:**
+```sql
+CREATE TABLE documents (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    filename VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    file_size BIGINT NOT NULL,
+    file_type VARCHAR(10) NOT NULL,
+    content TEXT,
+    summary TEXT,
+    keywords TEXT,
+    is_processed BOOLEAN DEFAULT FALSE,
+    is_encrypted BOOLEAN DEFAULT FALSE,
+    user_id INTEGER REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**ActivityLog Tablosu:**
+```sql
+CREATE TABLE activity_logs (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    document_id INTEGER REFERENCES documents(id),
+    activity_type VARCHAR(255),
+    description TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
 

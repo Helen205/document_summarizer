@@ -38,7 +38,6 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return encoded_jwt
 
 def verify_token(token: str) -> Optional[TokenData]:
-    """JWT token'ı doğrula"""
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         email: str = payload.get("sub")
@@ -46,32 +45,25 @@ def verify_token(token: str) -> Optional[TokenData]:
             return None
         token_data = TokenData(email=email)
         return token_data
-    except JWTError:
+    except JWTError as e:
         return None
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
 ) -> User:
-    """Mevcut kullanıcıyı al"""
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    
+    # ...
     try:
         token = credentials.credentials
         token_data = verify_token(token)
         if token_data is None:
             raise credentials_exception
-    except JWTError:
+    except JWTError as e:
         raise credentials_exception
-    
+    # ...
     user = db.query(User).filter(User.email == token_data.email).first()
     if user is None:
         raise credentials_exception
-    
     return user
 
 def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
